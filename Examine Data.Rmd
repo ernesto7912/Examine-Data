@@ -1,0 +1,61 @@
+---
+title: "Examine Data"
+author: "Ernesto Guardia"
+date: "January 23, 2017"
+output: html_document
+---
+
+```{r, echo=FALSE}
+
+hbat <- read.csv("HBAT.csv")
+
+```
+
+We are currently working with the HBAT dataset which has `r ncol(hbat)` variables for `r nrow(hbat)` observations. This is a made-up dataset consisting of both metric and non-metric variables.
+
+The sections to be covered in this document are the following:
+
+1. [Normality Test]
+2. [Relation Test]
+3. [Correlation Table]
+4. [Outlier Test]
+5. [Scatterplot Matrix]
+
+# Normality Test {#t1_normality}
+
+The following normality test is used to test the normality assumption for the metric variables (x6 through x22), as non-metric variables won't be normal. The process to test normality will be done in three steps:
+
+* Visual examination of histogram
+* Shapiro-Wilk test
+* Visual confirmation of normality assumption through QQPlots
+
+Below, you can see an example on how to perform it on variable x6.
+
+```{r, fig.align='center'}
+
+# Plot densities
+plot(density(hbat$x6), main='Histogram for x6')
+
+#Shapiro-Wilk test
+shapiro.test(hbat$x6)
+
+#H0: Data comes from a normal distribution
+#Ha: Data does not come from a normal distribution
+
+#Based on an alpha value of 0.05, we can reject the null hypothesis and conclude that the data does not come from a normal distribution.
+
+#QQPlot
+qqnorm(hbat$x6)
+qqline(hbat$x6, col=2)
+
+```
+
+```{r, echo=FALSE}
+
+myPlotDensity<-function(index) 
+  {plot(density(hbat[,index]), main=names(hbat[index]),ylab=names(hbat)[index])}
+
+lapply(7:23, FUN=myPlotDensity)
+
+```
+
